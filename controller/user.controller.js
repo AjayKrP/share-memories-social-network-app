@@ -15,8 +15,12 @@ module.exports = {
             !Object.hasOwnProperty.bind(body)('password')) {
             res.render('error', {message: 'Some required fields are missing'});
         }
+        console.log(body);
 
-        let _user = await user.findOne({email: body.email});
+        let _user = await user.findOne({
+            where: {email: body.email}
+        });
+        console.log(_user);
         if (!_user) {
             res.render('error', {message: 'User does not exists!'});
         }
@@ -39,7 +43,10 @@ module.exports = {
         }
 
         try {
-            let _user = await user.findOne({email: body.email});
+            let _user = await user.findOne({
+                where: {email: body.email}
+            });
+            
             if (_user) {
                 res.render('error', {message: 'User already exists'});
             }
@@ -57,5 +64,10 @@ module.exports = {
     account: async (req, res) => {
         const _user = await user.findOne({id: req.session.user.id});
         res.render('user/account', {title: 'User Account', user: _user});
+    },
+
+    logout: (req, res) => {
+        req.session.destroy();
+        res.redirect('/');
     }
 }

@@ -2,7 +2,9 @@ const {memories} = require('../models/index');
 
 module.exports = {
     posts: async (req, res) => {
-        let all_memories = await memories.findAll();
+        let all_memories = await memories.findAll({
+            order: [ [ 'createdAt', 'DESC' ]]
+        });
         res.render('memories/post', {title: `${req.session.user.name} Memories`, memories: all_memories});
     },
     form: (req, res) => {

@@ -39,6 +39,13 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// server loggedIn user session to frontend
+app.use((req, res, next) => {
+    if (req.session.user) {
+        res.locals.user = req.session.user;
+    }
+    next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

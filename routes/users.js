@@ -12,6 +12,7 @@ router.get('/', function (req, res, next) {
 router.get('/login', userController.login);
 router.get('/register', userController.register);
 router.get('/account', isAuth, userController.account);
+router.get('/logout', isAuth, userController.logout);
 
 // Post Routes
 router.post('/register', userController.registerPost);

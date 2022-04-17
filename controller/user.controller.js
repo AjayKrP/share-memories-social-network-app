@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const user = require('../models/index').user;
+const {user} = require('../models/index');
 
 module.exports = {
     login: (req, res) => {
@@ -8,6 +8,7 @@ module.exports = {
     register: (req, res) => {
         res.render('auth/signup', {title: 'Share Memories Register Page'})
     },
+
     loginPost: async (req, res) => {
         let body = req.body;
         if (!Object.hasOwnProperty.bind(body)('email') ||
@@ -21,6 +22,7 @@ module.exports = {
         }
         if (await bcrypt.compare(req.body.password, _user.password)) {
             req.session.user = _user;
+            // res.locals.user = _user;
             res.redirect('/users/account');
         }
         res.redirect('/users/login');
@@ -52,7 +54,8 @@ module.exports = {
         }
     },
 
-    account: function (req, res) {
-        res.render('user/account', {title: 'User Account'});
+    account: async (req, res) => {
+        const _user = await user.findOne({id: req.session.user.id});
+        res.render('user/account', {title: 'User Account', user: _user});
     }
 }

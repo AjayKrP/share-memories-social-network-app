@@ -9,6 +9,7 @@ module.exports = {
         res.render('auth/signup', {title: 'Share Memories Register Page'})
     },
 
+
     loginPost: async (req, res) => {
         let body = req.body;
         if (!Object.hasOwnProperty.bind(body)('email') ||

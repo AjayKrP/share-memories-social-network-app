@@ -34,16 +34,6 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// Building Relationship between tables
-db.memories.hasMany(db['tag'], {as: 'Memories', foreignKey: 'memory_id'})
-db.user.hasMany(db['memories'], {as: 'User', foreignKey: 'user_id'});
-
-
-db.user.belongsToMany(db['like'], {through: 'like_memories', foreignKey: 'user_id'});
-db.memories.belongsToMany(db['like'], {through: 'like_memories', foreignKey: 'memory_id'});
-
-
-db.user.belongsToMany(db['share'], {through: 'share_memories', foreignKey: 'user_id'});
-db.memories.belongsToMany(db['share'], {through: 'share_memories', foreignKey: 'memory_id'});
+db.sequelize.sync().then(res => {});
 
 module.exports = db;

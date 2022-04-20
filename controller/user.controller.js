@@ -13,22 +13,25 @@ module.exports = {
         let body = req.body;
         if (!Object.hasOwnProperty.bind(body)('email') ||
             !Object.hasOwnProperty.bind(body)('password')) {
-            res.render('error', {message: 'Some required fields are missing'});
+            req.flash('error', 'Some required fields are missing!');
+            res.redirect('/user/login');
         }
         console.log(body);
 
         let _user = await user.findOne({
             where: {email: body.email}
         });
-        console.log(_user);
         if (!_user) {
-            res.render('error', {message: 'User does not exists!'});
+            req.flash('error', 'User not found!');
+            res.redirect('/users/register');
         }
         if (await bcrypt.compare(req.body.password, _user.password)) {
             req.session.user = _user;
             // res.locals.user = _user;
+            req.flash('success', 'Login successful!');
             res.redirect('/users/account');
         }
+        req.flash('error', 'Error while login!');
         res.redirect('/users/login');
     },
 
@@ -39,25 +42,29 @@ module.exports = {
             !Object.hasOwnProperty.bind(body)('password') ||
             !Object.hasOwnProperty.bind(body)('name')
         ) {
-            res.render('error', {message: 'Some required fields are missing'});
+            req.flash('error', 'Some required fields are missing!');
+            res.redirect('/users/register');
         }
 
         try {
             let _user = await user.findOne({
                 where: {email: body.email}
             });
-            
+
             if (_user) {
-                res.render('error', {message: 'User already exists'});
+                req.flash('error', 'User already exists');
+                res.redirect('/users/login');
             }
 
             const hashPassword = await bcrypt.hash(req.body.password, 10);
             const newUser = await user.create({email: body.email, password: hashPassword, name: body.name});
             if (newUser) {
+                req.flash('success', 'Registration done! Please login to continue.');
                 res.redirect('/users/login');
             }
         } catch (e) {
-            res.render('error', {message: e.toString()});
+            req.flash('error', 'Something went wrong while creating account!');
+            res.redirect('/users/register');
         }
     },
 
@@ -67,6 +74,7 @@ module.exports = {
     },
 
     logout: (req, res) => {
+        req.flash('success', 'Logout successful!');
         req.session.destroy();
         res.redirect('/');
     }

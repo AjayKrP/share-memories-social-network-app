@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataTypes) => {
-    return sequelize.define('user', {
+    const User =  sequelize.define('user', {
         email: {
             type: dataTypes.STRING,
             unique: true
@@ -10,5 +10,9 @@ module.exports = (sequelize, dataTypes) => {
         password: {
             type: dataTypes.STRING
         }
-    })
+    });
+    User.associate = (model) => {
+        User.hasMany(model.memories, {as: 'memories'});
+    }
+    return User;
 }

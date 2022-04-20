@@ -1,9 +1,13 @@
-const {memories} = require('../models/index');
+const {memories, like} = require('../models/index');
 
 module.exports = {
     posts: async (req, res) => {
         let all_memories = await memories.findAll({
-            order: [ [ 'createdAt', 'DESC' ]]
+            include: [{
+                model: like,
+                as: 'likes'
+            }],
+            order: [['createdAt', 'DESC']]
         });
         res.render('memories/post', {title: `${req.session.user.name} Memories`, memories: all_memories});
     },
@@ -30,5 +34,19 @@ module.exports = {
         } catch (e) {
             res.render('error', {message: e.toString()});
         }
+    },
+
+    like: async (req, res) => {
+        let memoryId = req.params.id;
+        const Like = await like.findOne({where: {memoryId: memoryId}});
+        if (!Like) {
+            await like.create({count: 1, memoryId: memoryId});
+        } else {
+            await like.update(
+                {count: Like.count + 1},
+                {where: {memoryId: memoryId}}
+            )
+        }
+        res.redirect('/memories');
     }
 }

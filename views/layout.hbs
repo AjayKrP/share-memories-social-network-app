@@ -11,6 +11,17 @@
 
 {{>navbar }}
 <div class="container">
+    {{#if app_message}}
+        {{#if app_message.success}}
+            <div class="alert alert-success" role="alert">
+                {{app_message.success}}
+            </div>
+        {{else if app_message.error}}
+            <div class="alert alert-danger" role="alert">
+                {{app_message.error}}
+            </div>
+        {{/if}}
+    {{/if}}
     {{{body}}}
 </div>
 

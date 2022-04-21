@@ -3,6 +3,7 @@
         <form method="post" action="/memories/like/{{id}}">
             <h3>{{title}}</h3>
             <p>{{description}}</p>
+            <a href="/memories/edit/{{id}}">Edit</a>
             <button type="submit">Like {{likes.0.count}}</button>
         </form>
     </div>

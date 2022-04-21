@@ -15,6 +15,15 @@ module.exports = {
         res.render('memories/postForm', {title: `${req.session.user.name} add your memories`});
     },
 
+    editMemories: async (req, res) => {
+        let memoryId = req.params.id;
+        let memory = await memories.findOne({where: {id: memoryId}});
+        res.render('memories/postForm', {
+            title: `${req.session.user.name} add your memories`,
+            memory: memory
+        });
+    },
+
     addMemories: async (req, res) => {
         let body = req.body;
         if (!Object.hasOwnProperty.bind(body)('title') ||
@@ -23,11 +32,26 @@ module.exports = {
         }
 
         try {
-            let memory = await memories.create({
-                title: body.title,
-                description: body.description,
-                user_id: req.session.user.id
-            });
+            let memory = null;
+            console.log(body)
+            if (body.method !== 'edit') {
+                memory = await memories.create({
+                    title: body.title,
+                    description: body.description,
+                    userId: req.session.user.id
+                });
+            } else {
+                console.log('editing')
+                memory = await memories.update(
+                    {
+                        title: body.title,
+                        description: body.description
+                    },
+                    {
+                        where: {id: body.memoryId}
+                    }
+                );
+            }
             if (memory) {
                 res.redirect('/memories');
             }

@@ -58,7 +58,7 @@ app.use(session({
     store: sessionStore,
     cookie: {maxAge: oneDay},
     saveUninitialized: false
-}))
+}));
 
 app.use(cookieParser());
 app.use(flash());

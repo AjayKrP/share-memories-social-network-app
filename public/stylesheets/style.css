@@ -5,3 +5,10 @@ body {
 a {
   color: #00B7FF;
 }
+
+.post-memory {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 2px;
+}

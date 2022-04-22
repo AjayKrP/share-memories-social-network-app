@@ -7,7 +7,7 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.TEXT
         },
         image: {
-            type: dataTypes.BLOB
+            type: dataTypes.STRING
         }
     });
 

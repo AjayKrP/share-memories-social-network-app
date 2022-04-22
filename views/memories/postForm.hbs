@@ -1,4 +1,4 @@
-<form action="/memories/post" method="post">
+<form action="/memories/post" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Title:</label>
         <input type="text" name="title" value="{{memory.title}}" class="form-control" id="title" required>
@@ -8,6 +8,10 @@
         <textarea type="text" name="description" class="form-control" id="description" required>
             {{memory.description}}
         </textarea>
+    </div>
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="file" name="profile-file" required/>
     </div>
     {{#if memory.id}}
         <input type="hidden" name="method" value="edit">

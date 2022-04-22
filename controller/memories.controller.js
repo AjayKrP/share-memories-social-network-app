@@ -24,28 +24,27 @@ module.exports = {
         });
     },
 
-    addMemories: async (req, res) => {
+    addMemories: async (req, res, next) => {
         let body = req.body;
         if (!Object.hasOwnProperty.bind(body)('title') ||
             !Object.hasOwnProperty.bind(body)('description')) {
             res.render('error', {message: 'Some required fields are missing'});
         }
-
         try {
             let memory = null;
-            console.log(body)
             if (body.method !== 'edit') {
                 memory = await memories.create({
                     title: body.title,
                     description: body.description,
-                    userId: req.session.user.id
+                    userId: req.session.user.id,
+                    image: req.file.path
                 });
             } else {
-                console.log('editing')
                 memory = await memories.update(
                     {
                         title: body.title,
-                        description: body.description
+                        description: body.description,
+                        image: req.file.path
                     },
                     {
                         where: {id: body.memoryId}

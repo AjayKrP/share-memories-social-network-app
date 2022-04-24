@@ -7,3 +7,12 @@ function like(id) {
         }
     })
 }
+
+
+function addFriend(id) {
+    $.post('/friend/add/' + id, function (data, status) {
+        if (data.hasOwnProperty('success') && data.success === true) {
+
+        }
+    });
+}

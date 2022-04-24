@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('hbs');
 const session = require('express-session');
+require('dotenv').config();
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models').sequelize;
 const app = express();
@@ -14,6 +15,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const memoriesRouter = require('./routes/memories');
 const friendRouter = require('./routes/friend');
+const PORT = process.env.PORT || 3000;
 
 /*db.query('SET FOREIGN_KEY_CHECKS = 0')
     .then(function(){
@@ -27,7 +29,6 @@ const friendRouter = require('./routes/friend');
     }, function(err){
         console.log(err);
     });*/
-
 hbs.registerPartials(__dirname + '/views/partials');
 
 /**
@@ -42,7 +43,6 @@ const sessionStore = new SequelizeStore({
     checkExpirationInterval: 15 * 60 * 1000,
     expiration: 7 * 24 * 60 * 60 * 1000
 });
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

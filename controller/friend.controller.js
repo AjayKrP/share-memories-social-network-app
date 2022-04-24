@@ -2,15 +2,6 @@ const bcrypt = require('bcrypt');
 const {friend, user} = require('../models/index');
 
 module.exports = {
-    // TODO: change below 2 functions to middleware
-    friendExist: async (friendId) => {
-        let friendUser = await user.findOne({where: {id: friendId}});
-        if (!friendUser) {
-            return false;
-        }
-        return true;
-    },
-
     friendMappingExist: async (user1Id, user2Id) => {
         let alreadyFriend = await friend.findOne({where: {user1: user1Id, user2: user2Id}});
         if (!alreadyFriend) {
@@ -35,12 +26,6 @@ module.exports = {
             if (!friendId) {
                 res.status(402).json({error: 'Friend Id is missing!'});
             }
-            if (!await this.friendExist(friendId)) {
-                res.status(500).json({error: 'Friend does not exist'});
-            }
-            if (await this.friendMappingExist(currentUserId, friendId)) {
-                res.status(500).json({error: 'User is already friend!'});
-            }
             await friend.create({user1: currentUserId, user2: friendId});
             res.status(200).json({success: true});
         } catch (e) {
@@ -54,9 +39,6 @@ module.exports = {
             let friendId = req.params.id;
             if (!friendId) {
                 res.status(402).json({error: 'Friend Id is missing!'});
-            }
-            if (!await this.friendExist(friendId)) {
-                res.status(500).json({error: 'Friend does not exist'});
             }
             if (!await this.friendMappingExist(currentUserId, friendId)) {
                 res.status(500).json({error: 'User is not already friend!'});

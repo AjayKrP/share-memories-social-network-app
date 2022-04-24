@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const {user} = require('../models/index');
+const {user, friend} = require('../models/index');
 
 module.exports = {
     login: (req, res) => {
@@ -17,7 +17,6 @@ module.exports = {
             req.flash('error', 'Some required fields are missing!');
             res.redirect('/user/login');
         }
-        console.log(body);
 
         let _user = await user.findOne({
             where: {email: body.email}
@@ -78,5 +77,14 @@ module.exports = {
         req.flash('success', 'Logout successful!');
         req.session.destroy();
         res.redirect('/');
+    },
+
+    profile: async (req, res) => {
+        const profileId = req.params.userId;
+        if (!profileId) {
+            res.status(500).json({error: 'Profile Id is missing!'});
+        }
+        const _user = await user.findOne({id: profileId});
+        res.render('user/account', {title: 'User Account', user: _user});
     }
 }

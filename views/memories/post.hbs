@@ -1,16 +1,15 @@
-{{#each memories}}
-    <div class="well">
-        <form method="post" class="form" action="/memories/like/{{id}}">
+<div class="memory-container">
+    {{#each memories}}
+        <div class="well">
             <h3>{{title}}</h3>
             <p>{{description}}</p>
             <img class="img img-responsive" src="{{image}}" alt="{{title}}">
             <a class="href" href="/memories/edit/{{id}}">Edit</a>
-            <button class="btn btn-default" type="submit">❤ {{likes.0.count}}</button>
-        </form>
+            <a id="like-{{id}}" data-like="{{likes.0.count}}" onclick="like({{id}})"
+               class="btn btn-default"> ❤ <span id="like-count-{{id}}">{{likes.0.count}}</span></a>
+        </div>
+    {{/each}}
+    <div class="post-memory">
+        <a class="btn btn-info" href="/memories/post">Post Memory</a>
     </div>
-{{/each}}
-
-<div class="post-memory">
-    <a class="btn btn-info" href="/memories/post">Post Memory</a>
 </div>
-

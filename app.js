@@ -13,6 +13,7 @@ const flash = require('connect-flash');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const memoriesRouter = require('./routes/memories');
+const friendRouter = require('./routes/friend');
 
 /*db.query('SET FOREIGN_KEY_CHECKS = 0')
     .then(function(){
@@ -77,6 +78,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/memories', memoriesRouter);
+app.use('/friend', friendRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

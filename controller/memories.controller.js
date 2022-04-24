@@ -61,15 +61,19 @@ module.exports = {
 
     like: async (req, res) => {
         let memoryId = req.params.id;
-        const Like = await like.findOne({where: {memoryId: memoryId}});
-        if (!Like) {
-            await like.create({count: 1, memoryId: memoryId});
-        } else {
-            await like.update(
-                {count: Like.count + 1},
-                {where: {memoryId: memoryId}}
-            )
+        try {
+            let Like = await like.findOne({where: {memoryId: memoryId}});
+            if (!Like) {
+                Like = await like.create({count: 1, memoryId: memoryId});
+            } else {
+                Like = await like.update(
+                    {count: Like.count + 1},
+                    {where: {memoryId: memoryId}}
+                )
+            }
+            res.status(200).json({success: true, count: Like.count});
+        } catch (e) {
+            res.status(500).json({error: 'Internal server error!'});
         }
-        res.redirect('/memories');
     }
 }

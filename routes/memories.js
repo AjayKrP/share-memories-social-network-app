@@ -9,8 +9,8 @@ router.get('/', isAuth, memoriesController.posts);
 router.get('/post', isAuth, memoriesController.form);
 router.get('/edit/:id', isAuth, memoriesController.editMemories);
 
-router.post('/like/:id', isAuth, memoriesController.like);
 
-router.post('/post', upload.single('profile-file'), isAuth, memoriesController.addMemories);
+router.post('/like/:id', isAuth, memoriesController.like);
+router.post('/post', isAuth, upload.single('profile-file'), memoriesController.addMemories);
 
 module.exports = router;
